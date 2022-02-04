@@ -10,21 +10,20 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-
-  // res.status(200).json({ name: "John Doe" });
+  const getParam = req.query;
+  console.log(getParam.userName); 
+  const userName = getParam.userName;
+  
 
   //過去7日以内のツイートを検索します
   // https://developer.twitter.com/en/docs/twitter-api/tweets/search/quick-start/recent-search
 
-  // const needle = require("needle");
-
   //以下のコードは、環境変数からベアラートークンを設定します
-  // macOSまたはLinuxで環境変数を設定するには、ターミナルから以下のexportコマンドを実行します。
   // BEARER_TOKEN = 'YOUR-TOKEN'をエクスポートします
-  //const token = process.env.BEARER_TOKEN;のBEARER_TOKEN部分だけ自分のTOKENに変えても％文字がエラー判定になるので書き換えた
   const token = process.env.BEARER_TOKEN;
 
-  const endpointUrl = "https://api.twitter.com/2/tweets/search/recent";
+  // const endpointUrl = "https://api.twitter.com/2/tweets/search/recent";
+  const endpointUrl =`https://api.twitter.com/2/users/by/username/${userName}`;
 
   async function getRequest() {
     //以下のクエリパラメータを編集します
@@ -32,8 +31,8 @@ export default function handler(
     //日本語も検索できるがUTF-8BOM無しファイルでちゃんと保存しているか確認
     //デフォルトでは、ツイートIDとテキストフィールドのみが返されます
     const params = {
-      query: "#so954",
-      "tweet.fields": "author_id",
+      // query: "Pokemon_cojp",
+      // "tweet.fields": "author_id",
     };
 
     const res = await needle("get", endpointUrl, params, {
@@ -57,9 +56,9 @@ export default function handler(
       
       res.status(200).json(response);
 
-      console.dir(response, {
-        depth: null,
-      });
+      // console.dir(response, {
+      //   depth: null,
+      // });
     } catch (e) {
       console.log(e);
       process.exit(-1);

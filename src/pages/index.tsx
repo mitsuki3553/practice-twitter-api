@@ -1,8 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
 import styles from "src/styles/Home.module.css";
 
 const Home: NextPage = () => {
+  const [name ,setName] = useState("");
+
   return (
     <div className={styles.container}>
       <Head>
@@ -15,9 +18,10 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+        <input type="text" onChange={(e)=>{setName(e.target.value)}} value={name}/>
         <button
           onClick={async () => {
-            const res = await fetch("api/getUser");
+            const res = await fetch(`api/getUser?userName=${name}`);
             console.log(res);
             const json = await res.json();
             console.log(json);
