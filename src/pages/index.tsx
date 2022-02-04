@@ -17,7 +17,8 @@ const Home: NextPage = () => {
         </h1>
         <button
           onClick={async () => {
-            const res = await fetch("api/hello");
+            const res = await fetch("api/getUser");
+            console.log(res);
             const json = await res.json();
             console.log(json);
             
