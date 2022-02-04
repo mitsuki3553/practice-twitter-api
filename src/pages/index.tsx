@@ -1,10 +1,21 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from "src/styles/Home.module.css";
 
+type User = {
+  description: string;
+  id: string;
+  name: string;
+  profile_image_url: string;
+  username: string;
+};
+
 const Home: NextPage = () => {
   const [name ,setName] = useState("");
+  const [profile , setProfile] = useState<User | null>(null);
+  const { replace } = useRouter();
 
   return (
     <div className={styles.container}>
@@ -15,9 +26,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1>ユーザー名を入れてください！</h1>
         <input type="text" onChange={(e)=>{setName(e.target.value)}} value={name}/>
         <button
           onClick={async () => {
@@ -25,6 +34,8 @@ const Home: NextPage = () => {
             console.log(res);
             const json = await res.json();
             console.log(json);
+            setProfile(json.data);
+            replace(`/${json.data.id}`);
             
           }}
         >
