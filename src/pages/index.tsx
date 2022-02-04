@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import styles from "src/styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -18,7 +17,10 @@ const Home: NextPage = () => {
         </h1>
         <button
           onClick={async () => {
-            const a = await fetch("s");
+            const res = await fetch("api/hello");
+            const json = await res.json();
+            console.log(json);
+            
           }}
         >
           ボタン
