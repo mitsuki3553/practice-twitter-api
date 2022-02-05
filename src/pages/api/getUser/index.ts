@@ -14,7 +14,6 @@ export default function handler(
   const getParam = req.query;
   
   const userName = getParam.userName;
-  console.log(userName);
   
   //ベアラートークンを代入
   const token = process.env.BEARER_TOKEN;
