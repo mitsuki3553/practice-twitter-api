@@ -13,7 +13,6 @@ export default function handler(
 
   const getParam = req.query;
 
-  // const userId = getParam.userId;
   const userId = getParam.userId;
 
   const token = process.env.BEARER_TOKEN;
@@ -47,9 +46,6 @@ export default function handler(
 
       res.status(200).json(response);
 
-    //   console.dir(response, {
-    //     depth: null,
-    //   });
     } catch (e) {
       console.log(e);
       process.exit(-1);
