@@ -3,6 +3,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "src/styles/Home.module.css";
+import useSWR from "swr";
+
 
 type Tweet = {
 id: string,
@@ -15,9 +17,15 @@ public_metrics:{
 text:string
 };
 
+const useSharedState = (key:string,init:any)=>{
+  const { data, mutate} = useSWR( key, { fallbackData : init });
+  return [ data , mutate];
+}
+
 const User: NextPage = () => {
   const [tweets, setTweets] = useState<Tweet[] | null>(null);
-  const { query } = useRouter();
+  const [ _ , setRetweet ]  = useSharedState("retweet", null);
+  const { query, replace } = useRouter();
   
   useEffect(()=>{
     const getTweets = async()=>{
@@ -37,11 +45,20 @@ const User: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1>OK</h1>
+        <h1>ツイート一覧</h1>
         <div>
           {tweets?.map((item)=>{
             return(
-              <div key={item.id} className={styles.box}>
+              <div key={item.id} className={styles.box} onClick={async()=>{
+                console.log(item.id);
+                const res = await fetch(`api/getRetweet?tweetId=${item.id}`);
+                const json = await res.json();
+                console.log(json);
+                setRetweet(json);
+                await replace(`/retweet/${item.id}`);
+                
+                
+              }}>
                 <div>{item.text}</div>
                 <div>いいね：{item.public_metrics.like_count}</div>
                 <div>リツイート：{item.public_metrics.retweet_count}</div>
