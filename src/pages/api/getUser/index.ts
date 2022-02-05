@@ -17,15 +17,15 @@ export default function handler(
   
   //ベアラートークンを代入
   const token = process.env.BEARER_TOKEN;
-
+  
   // エンドポイントの指定
   const endpointUrl =`https://api.twitter.com/2/users/by/username/${userName}`;
-
+  
   async function getRequest() {
     const params = {
       "user.fields": "description,profile_image_url",
     };
-
+    
     const res = await needle(
       "get",
       endpointUrl,
@@ -36,8 +36,8 @@ export default function handler(
           authorization: `Bearer ${token}`,
         },
       }
-    );
-    
+      );
+      
     if (res.body) {
       return res.body;
     } else {

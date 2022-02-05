@@ -14,7 +14,6 @@ type User = {
 
 const Home: NextPage = () => {
   const [name ,setName] = useState("");
-  const [profile , setProfile] = useState<User | null>(null);
   const { replace } = useRouter();
 
   return (
@@ -30,12 +29,10 @@ const Home: NextPage = () => {
         <input type="text" onChange={(e)=>{setName(e.target.value)}} value={name}/>
         <button
           onClick={async () => {
-            const res = await fetch(`api/getUser?userName=${name}`);
-            console.log(res);
+            const trimName = name.trim();
+            const res = await fetch(`api/getUser?userName=${trimName}`);
             const json = await res.json();
-            console.log(json);
-            setProfile(json.data);
-            replace(`/${json.data.id}`);
+            await replace(`/${json.data.id}`);
             
           }}
         >
