@@ -21,25 +21,34 @@ export default function handler(
   const endpointUrl = `https://api.twitter.com/2/tweets/${tweetId}/retweeted_by`;
 
   async function getRequest(cnt:number,pagination?:string) {
-    let params;
-    if(pagination && pagination !="first"){
-      params = { max_results: "100", pagination_token:pagination };  
-    }else{
-      params = { "max_results": "100" };
+    
+    try{
+      let params;
+      if(pagination && pagination !="first"){
+        console.log(`無い方${pagination}`);
+        params = { max_results: "100", pagination_token:pagination };  
+      }else{
+        console.log(`ある方${pagination}`);
+        params = { "max_results": "100" };
+      }
+  
+      const res = await needle("get", endpointUrl, params, {
+        headers: {
+          "User-Agent": "v2RecentSearchJS",
+          authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (res.body) {
+        return res.body;
+      } else {
+        throw new Error("情報の取得に失敗しました");
+      }
+    }catch(e){
+      console.error(e);
+      throw new Error("情報の取得に失敗しました");
     }
-
-    const res = await needle("get", endpointUrl, params, {
-      headers: {
-        "User-Agent": "v2RecentSearchJS",
-        authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.body) {
-      return res.body;
-    } else {
-      throw new Error("Unsuccessful request");
-    }
+    
   }
 
   (async () => {
@@ -57,8 +66,8 @@ export default function handler(
           next = response.meta.next_token;
 
           const gap = Date.now() - startTime;
-          if(gap >= 5000) {
-            console.log("ロープ終了の強制終了！");
+          if(gap >= 45000) {
+            console.log("ループの強制終了！");
             break;
           }
         }
