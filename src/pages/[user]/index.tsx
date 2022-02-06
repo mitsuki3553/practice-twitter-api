@@ -17,7 +17,7 @@ public_metrics:{
 text:string
 };
 
-const useSharedState = (key:string,init:any)=>{
+export const useSharedState = (key:string,init?:any)=>{
   const { data, mutate} = useSWR( key, { fallbackData : init });
   return [ data , mutate];
 }
@@ -53,8 +53,10 @@ const User: NextPage = () => {
                 console.log(item.id);
                 const res = await fetch(`api/getRetweet?tweetId=${item.id}`);
                 const json = await res.json();
+                const nullException = await json.data.filter((i:any)=> i );
                 console.log(json);
-                setRetweet(json);
+                console.log(nullException);
+                setRetweet(nullException.flat());
                 await replace(`/retweet/${item.id}`);
                 
                 
