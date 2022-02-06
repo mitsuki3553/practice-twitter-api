@@ -56,9 +56,9 @@ const handleStop = ()=>{
         </button>
         <h1>リツイート一覧</h1>
         {retweet ? (
-          retweet.map((item: any) => {
+          retweet.map((item: any,index:number) => {
             return (
-              <div key={`${item.id}${item.name}`}>
+              <div key={index}>
                 <span>
                   {item.name}@{item.username}
                 </span>
