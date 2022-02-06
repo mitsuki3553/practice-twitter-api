@@ -8,7 +8,7 @@ import styles from "src/styles/Home.module.css";
 
 
 const User: NextPage = () => {
-  const { query } = useRouter();
+  const { query ,replace} = useRouter();
   const [ retweet ] = useSharedState("retweet");
   const [name ,setName] = useState("");
   const [timer, setTimer] = useState<any>(undefined);
@@ -45,6 +45,7 @@ const handleStop = ()=>{
       </Head>
 
       <main className={styles.main}>
+        <button onClick={()=>{replace("/")}}>トップへ</button>
         <div className={styles.box2}>{name}</div>
 
         <button onClick={handleStart} disabled={timer}>
