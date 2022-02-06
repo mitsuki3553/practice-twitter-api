@@ -116,6 +116,17 @@
   padding:1rem;
 }
 
+.box2{
+  text-align:center;
+  border:1px solid black;
+  border-radius:1rem;
+  background-color:#77ffcc;
+  width:32rem;
+  height:4rem;
+  margin:1rem;
+  padding:1rem;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
