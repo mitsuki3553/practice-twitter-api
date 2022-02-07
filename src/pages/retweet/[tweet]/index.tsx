@@ -12,7 +12,6 @@ const User: NextPage = () => {
   const [ retweet ] = useSharedState("retweet");
   const [name ,setName] = useState("");
   const [timer, setTimer] = useState<any>(undefined);
-console.log(retweet);
 
 const handleStart = ()=>{
     const intervalId = setInterval(()=>{
@@ -21,10 +20,9 @@ const handleStart = ()=>{
         const name = retweet[random].name;
         const userName = retweet[random].username;
         setName(`${name}@${userName}`);
-    },500);
+    },100);
     setTimer(intervalId);  
 }
-console.log(timer);
 
 
 const handleStop = ()=>{
