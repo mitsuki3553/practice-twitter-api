@@ -1,40 +1,35 @@
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import styles from "src/styles/Home.module.css";
-import useSWR from "swr";
 
+import styles from "src/styles/Home.module.css";
+import { useSharedState } from "src/utils/globalState";
 
 type Tweet = {
-id: string,
-public_metrics:{
-  like_count: number,
-  quote_count: number,
-  reply_count: number,
-  retweet_count: number,
-}
-text:string
+  id: string;
+  public_metrics: {
+    like_count: number;
+    quote_count: number;
+    reply_count: number;
+    retweet_count: number;
+  };
+  text: string;
 };
-
-export const useSharedState = (key:string,init?:any)=>{
-  const { data, mutate} = useSWR( key, { fallbackData : init });
-  return [ data , mutate];
-}
 
 const User: NextPage = () => {
   const [tweets, setTweets] = useState<Tweet[] | null>(null);
-  const [ _ , setRetweet ]  = useSharedState("retweet", null);
+  const [_, setRetweet] = useSharedState("retweet", null);
   const { query, replace } = useRouter();
-  
-  useEffect(()=>{
-    const getTweets = async()=>{
+
+  useEffect(() => {
+    const getTweets = async () => {
       const res = await fetch(`api/getTweets?userId=${query.user}`);
       const json = await res.json();
-      setTweets(json.data)      
+      setTweets(json.data);
     };
-    if(query.user) getTweets();
-  },[query.user])
+    if (query.user) getTweets();
+  }, [query.user]);
 
   return (
     <div className={styles.container}>
@@ -47,25 +42,27 @@ const User: NextPage = () => {
       <main className={styles.main}>
         <h1>ツイート一覧</h1>
         <div>
-          {tweets?.map((item)=>{
-            return(
-              <div key={item.id} className={styles.box} onClick={async()=>{
-                console.log(item.id);
-                const res = await fetch(`api/getRetweet?tweetId=${item.id}`);
-                const json = await res.json();
-                const nullException = await json.data.filter((i:any)=> i );
-                console.log(json);
-                console.log(nullException);
-                setRetweet(nullException.flat());
-                await replace(`/retweet/${item.id}`);
-                
-                
-              }}>
+          {tweets?.map((item) => {
+            return (
+              <div
+                key={item.id}
+                className={styles.box}
+                onClick={async () => {
+                  console.log(item.id);
+                  const res = await fetch(`api/getRetweet?tweetId=${item.id}`);
+                  const json = await res.json();
+                  const nullException = await json.data.filter((i: any) => i);
+                  console.log(json);
+                  console.log(nullException);
+                  setRetweet(nullException.flat());
+                  await replace(`/retweet/${item.id}`);
+                }}
+              >
                 <div>{item.text}</div>
                 <div>いいね：{item.public_metrics.like_count}</div>
                 <div>リツイート：{item.public_metrics.retweet_count}</div>
               </div>
-            )
+            );
           })}
         </div>
       </main>
