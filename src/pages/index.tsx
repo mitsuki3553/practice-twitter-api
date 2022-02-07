@@ -26,13 +26,14 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <h1>リツイートルーレット(仮)</h1>
         <Image
           src="/userNameExample.png"
           alt="ユーザー名の例"
           width={500}
           height={300}
         />
-        <h1>ユーザー名を入れてください！</h1>
+        <h2>誰のツイートを取得しますか？</h2>
         <input
           type="text"
           onChange={(e) => {
