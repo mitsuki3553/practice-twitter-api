@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from "src/styles/Home.module.css";
@@ -25,15 +26,26 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <Image
+          src="/userNameExample.png"
+          alt="ユーザー名の例"
+          width={500}
+          height={300}
+        />
         <h1>ユーザー名を入れてください！</h1>
-        <input type="text" onChange={(e)=>{setName(e.target.value)}} value={name}/>
+        <input
+          type="text"
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          value={name}
+        />
         <button
           onClick={async () => {
             const trimName = name.trim();
             const res = await fetch(`api/getUser?userName=${trimName}`);
             const json = await res.json();
             await replace(`/${json.data.id}`);
-            
           }}
         >
           ボタン
