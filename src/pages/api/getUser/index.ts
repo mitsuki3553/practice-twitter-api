@@ -12,32 +12,27 @@ export default function handler(
 ) {
   // リクエストパラメータを変数に代入
   const getParam = req.query;
-  
+
   const userName = getParam.userName;
-  
+
   //ベアラートークンを代入
   const token = process.env.BEARER_TOKEN;
-  
+
   // エンドポイントの指定
-  const endpointUrl =`https://api.twitter.com/2/users/by/username/${userName}`;
-  
+  const endpointUrl = `https://api.twitter.com/2/users/by/username/${userName}`;
+
   async function getRequest() {
     const params = {
       "user.fields": "description,profile_image_url",
     };
-    
-    const res = await needle(
-      "get",
-      endpointUrl,
-      params,
-      {
-        headers: {
-          "User-Agent": "v2RecentSearchJS",
-          authorization: `Bearer ${token}`,
-        },
-      }
-      );
-      
+
+    const res = await needle("get", endpointUrl, params, {
+      headers: {
+        "User-Agent": "v2RecentSearchJS",
+        authorization: `Bearer ${token}`,
+      },
+    });
+
     if (res.body) {
       return res.body;
     } else {
@@ -48,9 +43,8 @@ export default function handler(
   (async () => {
     try {
       const response = await getRequest();
-      
-      res.status(200).json(response);
 
+      res.status(200).json(response);
     } catch (e) {
       console.log(e);
       process.exit(-1);

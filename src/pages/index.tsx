@@ -14,7 +14,7 @@ type User = {
 };
 
 const Home: NextPage = () => {
-  const [name ,setName] = useState("");
+  const [name, setName] = useState("");
   const { replace } = useRouter();
 
   return (

@@ -10,15 +10,13 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-
   const getParam = req.query;
 
   const userId = getParam.userId;
 
   const token = process.env.BEARER_TOKEN;
 
-  const endpointUrl =
-    `https://api.twitter.com/2/users/${userId}/tweets`;
+  const endpointUrl = `https://api.twitter.com/2/users/${userId}/tweets`;
 
   async function getRequest() {
     const params = {
@@ -31,7 +29,7 @@ export default function handler(
         authorization: `Bearer ${token}`,
       },
     });
-    
+
     if (res.body) {
       return res.body;
     } else {
@@ -45,7 +43,6 @@ export default function handler(
       const response = await getRequest();
 
       res.status(200).json(response);
-
     } catch (e) {
       console.log(e);
       process.exit(-1);
