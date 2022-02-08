@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import styles from "src/styles/Home.module.css";
 import { useSharedState } from "src/utils/globalState";
+import Image from "next/image";
 
 type Tweet = {
   id: string;
@@ -20,6 +21,7 @@ type Tweet = {
 const User: NextPage = () => {
   const [tweets, setTweets] = useState<Tweet[] | null>(null);
   const [_, setRetweet] = useSharedState("retweet", null);
+  const [user] = useSharedState("user")
   const { query, replace } = useRouter();
 
   useEffect(() => {
@@ -40,6 +42,8 @@ const User: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <Image src={user.profile_image_url} alt="プロフ画像" height={50} width={50}/> 
+        <div>{user.name}</div>
         <h1>ツイート一覧</h1>
         <div>
           {tweets?.map((item) => {
