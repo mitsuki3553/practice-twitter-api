@@ -128,6 +128,16 @@
   padding:1rem;
 }
 
+.box3{
+  border:1px solid black;
+  border-radius:1rem;
+  background-color:gray;
+  color:white;
+  margin:1rem;
+  padding:1rem;
+  cursor:pointer;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
