@@ -21,11 +21,13 @@ export default function handler(
   async function getRequest(cnt: number, pagination?: string) {
     try {
       let params;
+      console.log(cnt);
+      
       if (pagination && pagination != "first") {
-        console.log(`無い方${pagination}`);
+        console.log(`ページネーションがある方${pagination}`);
         params = { max_results: "100", pagination_token: pagination };
       } else {
-        console.log(`ある方${pagination}`);
+        console.log(`ページネーションがない方${pagination}`);
         params = { max_results: "100" };
       }
 
@@ -55,15 +57,19 @@ export default function handler(
       let cnt = 0;
       const startTime = Date.now();
       while (next) {
-        const response = await getRequest(cnt, next);
-        data.push(response.data);
-        cnt++;
-        next = response.meta.next_token;
-
-        const gap = Date.now() - startTime;
-        if (gap >= 45000) {
-          console.log("ループの強制終了！");
-          break;
+        try {
+          const response = await getRequest(cnt, next);
+          data.push(response.data);
+          cnt++;
+          next = response.meta.next_token;
+  
+          const gap = Date.now() - startTime;
+          if (gap >= 45000) {
+            console.log("ループの強制終了！");
+            break;
+          }
+        } catch (error) {
+          console.log(error);         
         }
       }
 
