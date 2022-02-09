@@ -6,18 +6,12 @@ import { useRouter } from "next/router";
 
 import styles from "src/styles/Home.module.css";
 import { useSharedState } from "src/utils/globalState";
+import { User } from "src/type";
 
-type User = {
-  description: string;
-  id: string;
-  name: string;
-  profile_image_url: string;
-  username: string;
-};
 
 const Home: NextPage = () => {
   const [name, setName] = useState("");
-  const [user, setUser] = useSharedState("user",null);
+  const [_, setUser] = useSharedState("user",null);
   const { replace } = useRouter();
 
   return (
@@ -47,8 +41,8 @@ const Home: NextPage = () => {
           onClick={async () => {
             const trimName = name.trim();
             const res = await fetch(`api/getUser?userName=${trimName}`);
-            const json = await res.json();
-            setUser(json.data);
+            const json = await res.json() as User;
+            setUser(json);
             await replace(`/${json.data.id}`);
           }}
         >
