@@ -4,7 +4,7 @@ export type User = {
   includes: IncludesContent[];
 };
 
-type UserData = {
+export type UserData = {
   description: string;
   id: string;
   name: string;
@@ -13,7 +13,7 @@ type UserData = {
   username: string;
 };
 
-type IncludesContent = {
+export type IncludesContent = {
   id: string;
   public_metrics: {
     like_count: number;
@@ -23,4 +23,3 @@ type IncludesContent = {
   };
   text: string;
 };
-

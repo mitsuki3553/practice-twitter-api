@@ -22,7 +22,7 @@ export default function handler(
     try {
       let params;
       console.log(cnt);
-      
+
       if (pagination && pagination != "first") {
         console.log(`ページネーションがある方${pagination}`);
         params = { max_results: "100", pagination_token: pagination };
@@ -62,14 +62,14 @@ export default function handler(
           data.push(response.data);
           cnt++;
           next = response.meta.next_token;
-  
+
           const gap = Date.now() - startTime;
           if (gap >= 45000) {
             console.log("ループの強制終了！");
             break;
           }
         } catch (error) {
-          console.log(error);         
+          console.log(error);
         }
       }
 
