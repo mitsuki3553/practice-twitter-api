@@ -20,38 +20,36 @@ type Tweet = {
 
 //ユーザーデータを取得したときの型
 type UserData = {
-    description:string; 
-    id: string;
-    name: string;
-    pinned_tweet_id: string;
-    profile_image_url: string;
-    username: string;
-  };
+  description: string;
+  id: string;
+  name: string;
+  pinned_tweet_id: string;
+  profile_image_url: string;
+  username: string;
+};
 
-  type IncludesContent = {
-    id: string;
-    public_metrics: {
-      like_count: number;
-      quote_count: number;
-      reply_count: number;
-      retweet_count: number;
-    };
-    text: string;
+type IncludesContent = {
+  id: string;
+  public_metrics: {
+    like_count: number;
+    quote_count: number;
+    reply_count: number;
+    retweet_count: number;
   };
+  text: string;
+};
 
-  type User = {
-    data:UserData;
-    includes: IncludesContent[];
-  }
+type User = {
+  data: UserData;
+  includes: IncludesContent[];
+};
 
 const User: NextPage = () => {
   const [tweets, setTweets] = useState<Tweet[] | null>(null);
   const [_, setRetweet] = useSharedState("retweet", null);
-  const [user ] = useSharedState("user")
+  const [user] = useSharedState("user");
   const { query, replace } = useRouter();
 
-  console.log(user);
-  
   useEffect(() => {
     const getTweets = async () => {
       const res = await fetch(`api/getTweets?userId=${query.user}`);
@@ -70,39 +68,51 @@ const User: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Image
-          src={user.data.profile_image_url}
-          alt="プロフ画像"
-          height={50}
-          width={50}
-        />
-        <div>{user.data.name}</div>
+        {user ? (
+          <>
+            <Image
+              src={user.data.profile_image_url}
+              alt="プロフ画像"
+              height={50}
+              width={50}
+            />
+            <div>{user.data.name}</div>
+          </>
+        ) : (
+          <div>NoUser</div>
+        )}
         <h1>ツイート一覧</h1>
-        <div>
-          {user.includes.tweets?.map((item : IncludesContent) => {
-            return (
-              <div
-                key={item.id}
-                className={styles.box3}
-                onClick={async () => {
-                  console.log(item.id);
-                  const res = await fetch(`api/getRetweet?tweetId=${item.id}`);
-                  const json = await res.json();
-                  const nullException = await json.data.filter((i: any) => i);
-                  console.log(json);
-                  console.log(nullException);
-                  setRetweet(nullException.flat());
-                  await replace(`/retweet/${item.id}`);
-                }}
-              >
-                <div>固定されたツイート</div>
-                <div>{item.text}</div>
-                <div>いいね：{item.public_metrics.like_count}</div>
-                <div>リツイート：{item.public_metrics.retweet_count}</div>
-              </div>
-            );
-          })}
-        </div>
+        {user ? (
+          <div>
+            {user.includes.tweets?.map((item: IncludesContent) => {
+              return (
+                <div
+                  key={item.id}
+                  className={styles.box3}
+                  onClick={async () => {
+                    console.log(item.id);
+                    const res = await fetch(
+                      `api/getRetweet?tweetId=${item.id}`
+                    );
+                    const json = await res.json();
+                    const nullException = await json.data.filter((i: any) => i);
+                    console.log(json);
+                    console.log(nullException);
+                    setRetweet(nullException.flat());
+                    await replace(`/retweet/${item.id}`);
+                  }}
+                >
+                  <div>固定されたツイート</div>
+                  <div>{item.text}</div>
+                  <div>いいね：{item.public_metrics.like_count}</div>
+                  <div>リツイート：{item.public_metrics.retweet_count}</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div>固定ツイートはありません</div>
+        )}
 
         <div>
           {tweets?.map((item) => {
