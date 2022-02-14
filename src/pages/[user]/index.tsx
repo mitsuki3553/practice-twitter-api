@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 
 import styles from "src/styles/Home.module.css";
@@ -78,33 +77,39 @@ const User: NextPage = () => {
       )}
       <h1>ツイート一覧</h1>
       {user ? (
-        <div>
-          {user.includes.tweets?.map((item: IncludesContent) => {
-            return (
-              <div
-                key={item.id}
-                className={styles.box3}
-                onClick={async () => {
-                  console.log(item.id);
-                  const res = await fetch(`api/getRetweet?tweetId=${item.id}`);
-                  const json = await res.json();
-                  const nullException = await json.data.filter((i: any) => i);
-                  console.log(json);
-                  console.log(nullException);
-                  setRetweet(nullException.flat());
-                  await replace(`/retweet/${item.id}`);
-                }}
-              >
-                <div>固定されたツイート</div>
-                <div>{item.text}</div>
-                <div>いいね：{item.public_metrics.like_count}</div>
-                <div>リツイート：{item.public_metrics.retweet_count}</div>
-              </div>
-            );
-          })}
-        </div>
+        <>
+          {user.includes ? (
+            user.includes.tweets?.map((item: IncludesContent) => {
+              return (
+                <div
+                  key={item.id}
+                  className={styles.box3}
+                  onClick={async () => {
+                    console.log(item.id);
+                    const res = await fetch(
+                      `api/getRetweet?tweetId=${item.id}`
+                    );
+                    const json = await res.json();
+                    const nullException = await json.data.filter((i: any) => i);
+                    console.log(json);
+                    console.log(nullException);
+                    setRetweet(nullException.flat());
+                    await replace(`/retweet/${item.id}`);
+                  }}
+                >
+                  <div>固定されたツイート</div>
+                  <div>{item.text}</div>
+                  <div>いいね：{item.public_metrics.like_count}</div>
+                  <div>リツイート：{item.public_metrics.retweet_count}</div>
+                </div>
+              );
+            })
+          ) : (
+            <div className={styles.box3}>固定ツイートはありません</div>
+          )}
+        </>
       ) : (
-        <div>固定ツイートはありません</div>
+        <div>読込中…</div>
       )}
 
       <div>
