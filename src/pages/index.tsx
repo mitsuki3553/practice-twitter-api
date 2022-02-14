@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -13,6 +12,17 @@ const Home: NextPage = () => {
   const [_, setUser] = useSharedState("user", null);
   const { replace } = useRouter();
 
+  const handleSerachTweet = async () => {
+    const trimName = name.trim();
+    const res = await fetch(`api/getUser?userName=${trimName}`);
+    const json = (await res.json()) as User;
+    setUser(json);
+    await replace(`/${json.data.id}`);
+  };
+
+  const handleName = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setName(e.currentTarget.value);
+
   return (
     <main className={styles.main}>
       <h1>リツイートルーレット(仮)</h1>
@@ -23,22 +33,8 @@ const Home: NextPage = () => {
         height={300}
       />
       <h2>誰のツイートを取得しますか？</h2>
-      <input
-        type="text"
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-        value={name}
-      />
-      <button
-        onClick={async () => {
-          const trimName = name.trim();
-          const res = await fetch(`api/getUser?userName=${trimName}`);
-          const json = (await res.json()) as User;
-          setUser(json);
-          await replace(`/${json.data.id}`);
-        }}
-      >
+      <input type="text" onChange={handleName} value={name} />
+      <button onClick={handleSerachTweet} disabled={!name.trim()}>
         ボタン
       </button>
     </main>
