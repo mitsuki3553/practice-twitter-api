@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import styles from "src/styles/Home.module.css";
 import { useSharedState } from "src/utils/globalState";
-import Image from "next/image";
+import { Header } from "src/components/header";
 
 type Tweet = {
   id: string;
@@ -60,21 +60,7 @@ const User: NextPage = () => {
 
   return (
     <main className={styles.main}>
-      {user ? (
-        <>
-          <Image
-            src={user.data.profile_image_url}
-            alt="プロフ画像"
-            height={50}
-            width={50}
-          />
-          <div>
-            {user.data.name}@{user.data.username}
-          </div>
-        </>
-      ) : (
-        <div>NoUser</div>
-      )}
+      <Header />
       <h1>ツイート一覧</h1>
       {user ? (
         <>

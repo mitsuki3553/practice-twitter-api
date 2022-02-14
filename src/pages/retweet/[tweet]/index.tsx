@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+
 import styles from "src/styles/Home.module.css";
 import { useSharedState } from "src/utils/globalState";
+import { Header } from "src/components/header";
 
 const User: NextPage = () => {
   const { query, replace } = useRouter();
@@ -34,19 +36,11 @@ const User: NextPage = () => {
 
   return (
     <main className={styles.main}>
-      <button
-        onClick={() => {
-          replace("/");
-        }}
-      >
-        トップへ
-      </button>
+      <Header />
       <div className={styles.box2}>{name}</div>
-
       <button onClick={handleStart} disabled={timer}>
         スタート！
       </button>
-
       <button onClick={handleStop} disabled={!timer}>
         ストップ！
       </button>
