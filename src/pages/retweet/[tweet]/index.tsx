@@ -6,9 +6,11 @@ import { useSharedState } from "src/utils/globalState";
 
 const User: NextPage = () => {
   const { query, replace } = useRouter();
-  const [retweet] = useSharedState("retweet");
+  const [retweet,setRetweet] = useSharedState("retweet");
   const [name, setName] = useState("");
   const [timer, setTimer] = useState<any>(undefined);
+  const [newName, setNewName] = useState("");
+  const [newUserName, setNewUserName] = useState("");
 
   const handleStart = () => {
     const intervalId = setInterval(() => {
@@ -20,7 +22,7 @@ const User: NextPage = () => {
     }, 100);
     setTimer(intervalId);
   };
-
+  
   const handleStop = () => {
     const random = Math.floor(retweet.length * Math.random());
     const name = retweet[random].name;
@@ -49,13 +51,43 @@ const User: NextPage = () => {
         ストップ！
       </button>
       <h1>リツイート一覧</h1>
+      <div>
+      <input
+        type="text"
+        placeholder="追加する名前"
+        value={newName}
+        onChange={(e) => {
+          setNewName(e.target.value);
+        }}
+      /> 
+      <span> @ </span>
+      <input
+        type="text"
+        placeholder="追加するユーザー名(任意)"
+        value={newUserName}
+        onChange={(e) => {
+          setNewUserName(e.target.value);
+        }}
+      />
+      </div>
+      <button onClick={() => {
+        setRetweet([...retweet,{id:"",name:newName,username:newUserName}])
+        setNewName(""); setNewUserName("");
+      }}
+      disabled={!newName}
+      >追加</button>
       {retweet ? (
-        retweet.map((item: any, index: number) => {
+        retweet.slice().reverse().map((item: any, index: number) => {
           return (
             <div key={index}>
               <span>
                 {item.name}@{item.username}
               </span>
+              <button 
+              onClick={()=>{
+                setRetweet([...retweet].filter(i=>i.name !== item.name));
+              }}
+              >削除</button>
             </div>
           );
         })
