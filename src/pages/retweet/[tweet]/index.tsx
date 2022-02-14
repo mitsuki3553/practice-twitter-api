@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import styles from "src/styles/Home.module.css";
 import { useSharedState } from "src/utils/globalState";
