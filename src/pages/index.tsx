@@ -12,14 +12,14 @@ const Home: NextPage = () => {
   const [_, setUser] = useSharedState("user", null);
   const { replace } = useRouter();
 
-  const handleSerachTweet = useCallback( async () => {
+  const handleSerachTweet = useCallback(async () => {
     const trimName = name.trim();
     const res = await fetch(`api/getUser?userName=${trimName}`);
     const json = (await res.json()) as User;
     setUser(json);
     await replace(`/${json.data.id}`);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name]);
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) =>
     setName(e.currentTarget.value);
